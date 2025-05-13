@@ -6,13 +6,13 @@
   <style>
     @font-face {
       font-family: 'Biome Light';
-      src: url('Biome-Light.ttf') format('truetype'); /* Replace with actual path if hosted */
+      src: url('Biome-Light.ttf') format('truetype');
     }
 
     body {
       font-family: 'Biome Light', sans-serif;
-      font-size: 14px;
-      background-color: #f7f7f7;
+      background: url('Forest Background.jpg') no-repeat center center fixed;
+      background-size: cover;
       margin: 0;
       padding: 0;
       display: flex;
@@ -23,43 +23,51 @@
 
     .container {
       background: white;
-      padding: 30px;
+      padding: 40px 30px 30px 30px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: left;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
       max-width: 500px;
       width: 100%;
+      text-align: center;
       position: relative;
     }
 
     .logo {
       position: absolute;
-      top: 15px;
-      left: 15px;
-      width: 80px;
+      top: 20px;
+      left: 20px;
+      width: 160px; /* 100% increase from original 80px */
     }
 
     h1 {
+      font-size: 25px;
+      font-weight: bold;
+      margin-top: 100px; /* extra space below logo */
       margin-bottom: 30px;
     }
 
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: left;
     }
 
     select, input {
-      width: 80%;
-      padding: 8px;
+      width: 100%;
+      padding: 10px;
       margin-top: 5px;
+      font-size: 16px;
+      font-weight: normal;
       border-radius: 4px;
       border: 1px solid #ccc;
     }
 
     button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 14px;
+      margin-top: 25px;
+      padding: 12px 24px;
+      font-size: 16px;
       background-color: #0078D4;
       color: white;
       border: none;
@@ -74,8 +82,8 @@
 </head>
 <body>
   <div class="container">
-    <img src="01.%20IMW%20Logo%20-%20Blue.png" alt="IMW Logo" class="logo">
-    <h1>IMW JACKED IN JUNE 2025</h1>
+    <img src="01. IMW Logo - Blue.png" alt="IMW Logo" class="logo">
+    <h1>JACKED IN JUNE 2025</h1>
     <form id="teamForm">
       <label for="team">Team:</label>
       <select id="team" name="team" onchange="populateMembers()">
