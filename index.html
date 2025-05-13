@@ -138,42 +138,60 @@
   const scopes = ["Files.ReadWrite", "User.Read"];
 
   async function signInAndSubmit(formData) {
-    try {
+  try {
+    let account = msalInstance.getActiveAccount();
+
+    if (!account) {
       const loginResponse = await msalInstance.loginPopup({ scopes });
-      const account = loginResponse.account;
+      account = loginResponse.account;
       msalInstance.setActiveAccount(account);
+    }
 
-      const tokenResponse = await msalInstance.acquireTokenSilent({
-        scopes,
-        account
-      });
+    let tokenResponse;
+    try {
+      tokenResponse = await msalInstance.acquireTokenSilent({ scopes, account });
+    } catch (silentError) {
+      console.warn("Silent token acquisition failed, falling back to popup", silentError);
+      tokenResponse = await msalInstance.acquireTokenPopup({ scopes });
+    }
 
-      const accessToken = tokenResponse.accessToken;
+    const accessToken = tokenResponse.accessToken;
 
-      const timestamp = new Date().toLocaleString("en-US", {
-        year: "numeric", month: "2-digit", day: "2-digit",
-        hour: "2-digit", minute: "2-digit", hour12: true
-      });
+    const timestamp = new Date().toLocaleString("en-US", {
+      year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hour12: true
+    });
 
-      const row = {
-        values: [[timestamp, formData.team, formData.member, formData.activity, formData.timeValue]]
-      };
+    const row = {
+      values: [[timestamp, formData.team, formData.member, formData.activity, formData.timeValue]]
+    };
 
-      await fetch("https://graph.microsoft.com/v1.0/me/drive/root:https://imwca-my.sharepoint.com/personal/gary_ghag_imw_ca/Documents/Jacked%20In%20June/2025/Jacked%20In%20June%202025.xlsx?web=:/workbook/tables/Submissions/rows/add", {
+    const response = await fetch(
+      "https://graph.microsoft.com/v1.0/me/drive/root:/Jacked In June/2025/Jacked In June 2025.xlsx:/workbook/tables/Submissions/rows/add",
+      {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(row)
-      });
+      }
+    );
 
-      return true; // success
-    } catch (error) {
-      console.error("Error submitting to Excel:", error);
-      return false; // failure
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`Graph error: ${response.status} - ${errText}`);
     }
+
+    console.log("Submission succeeded.");
+    alert("✅ Submission complete!");
+
+  } catch (error) {
+    console.error("❌ Submission failed:", error);
+    alert("❌ Submission failed. Please try again or contact IT.");
   }
+}
+
 
   document.addEventListener("DOMContentLoaded", function () {
     populateMembers();
