@@ -107,46 +107,73 @@
     </form>
   </div>
 
-  <script>
-    const members = {
-      "Team Alpha": ["Alice", "Aaron"],
-      "Team Beta": ["Bob", "Bella"]
-    };
+ <script>
+  const members = {
+    "Team Alpha": ["Alice", "Aaron"],
+    "Team Beta": ["Bob", "Bella"]
+  };
 
-    function populateMembers() {
-      const team = document.getElementById("team").value;
-      const memberSelect = document.getElementById("member");
-      memberSelect.innerHTML = "";
+  function populateMembers() {
+    const team = document.getElementById("team").value;
+    const memberSelect = document.getElementById("member");
+    memberSelect.innerHTML = "";
 
-      members[team].forEach(member => {
-        const option = document.createElement("option");
-        option.value = member;
-        option.textContent = member;
-        memberSelect.appendChild(option);
-      });
-    }
+    members[team].forEach(member => {
+      const option = document.createElement("option");
+      option.value = member;
+      option.textContent = member;
+      memberSelect.appendChild(option);
+    });
+  }
 
-    document.getElementById("teamForm").addEventListener("submit", async function(e) {
+  document.addEventListener("DOMContentLoaded", function() {
+    populateMembers();
+
+    const form = document.getElementById("teamForm");
+    const timeInput = document.querySelector("[name=timeValue]");
+    const container = document.querySelector(".container");
+
+    form.addEventListener("submit", async function(e) {
       e.preventDefault();
+
+      const timeValue = timeInput.value.trim();
+      if (!/^[0-9]+(\.[0-9]+)?$/.test(timeValue)) {
+        timeInput.style.borderColor = "red";
+        if (!document.getElementById("errorMsg")) {
+          const errorMsg = document.createElement("div");
+          errorMsg.id = "errorMsg";
+          errorMsg.style.color = "red";
+          errorMsg.style.marginTop = "10px";
+          errorMsg.innerText = "Please enter only your time value. E.g., 1 hour and 30 min = 1.5";
+          form.appendChild(errorMsg);
+        }
+        return;
+      } else {
+        timeInput.style.borderColor = "#ccc";
+        const existing = document.getElementById("errorMsg");
+        if (existing) existing.remove();
+      }
 
       const formData = {
         team: document.getElementById("team").value,
         member: document.getElementById("member").value,
         activity: document.querySelector("[name=activity]").value,
-        timeValue: document.querySelector("[name=timeValue]").value
+        timeValue
       };
 
-      await fetch("https://prod-XXXXXXX.webhook.office.com/webhookb2/XXXX", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
+      await signInAndSubmit(formData);
 
-      alert("Submitted!");
+      form.style.display = "none";
+      const thankYou = document.createElement("div");
+      thankYou.innerHTML = `
+        <img src="01. IMW Logo - Blue.png" alt="IMW Logo" class="logo" style="width:160px;margin-bottom:20px;">
+        <h2>Thanks for your submission!</h2>
+      `;
+      container.appendChild(thankYou);
     });
+  });
+</script>
 
-    populateMembers();
-  </script>
 <script src="https://alcdn.msauth.net/browser/2.35.0/js/msal-browser.min.js"></script>
 <script>
   const msalConfig = {
