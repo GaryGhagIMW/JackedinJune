@@ -147,5 +147,71 @@
 
     populateMembers();
   </script>
+<script src="https://alcdn.msauth.net/browser/2.35.0/js/msal-browser.min.js"></script>
+<script>
+  const msalConfig = {
+    auth: {
+      clientId: "7d23d831-b0e3-460a-8403-2ecf8dec255e", // Replace with your Azure AD app's client ID
+      authority: "https://login.microsoftonline.com/ce489f49-6a08-487c-bc9c-7d75078824ea", // Replace with your tenant ID
+      redirectUri: window.location.href
+    }
+  };
+
+  const msalInstance = new msal.PublicClientApplication(msalConfig);
+  const scopes = ["Files.ReadWrite", "User.Read"];
+
+  async function signInAndSubmit(formData) {
+    try {
+      const loginResponse = await msalInstance.loginPopup({ scopes });
+      const account = loginResponse.account;
+      msalInstance.setActiveAccount(account);
+
+      const tokenResponse = await msalInstance.acquireTokenSilent({
+        scopes,
+        account
+      });
+
+      const accessToken = tokenResponse.accessToken;
+
+      const timestamp = new Date().toLocaleString("en-US", {
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", hour12: true
+      });
+
+      const row = {
+        values: [[timestamp, formData.team, formData.member, formData.activity, formData.timeValue]]
+      };
+
+      await fetch("https://graph.microsoft.com/v1.0/me/drive/root:https://imwca-my.sharepoint.com/personal/gary_ghag_imw_ca/Documents/Jacked%20In%20June/2025/Jacked%20In%20June%202025.xlsx?web=:/workbook/tables/Submissions/rows/add", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(row)
+      });
+
+      alert("Submitted!");
+    } catch (error) {
+      console.error("Error submitting to Excel:", error);
+      alert("Submission failed. See console for details.");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("teamForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const formData = {
+        team: document.getElementById("team").value,
+        member: document.getElementById("member").value,
+        activity: document.querySelector("[name=activity]").value,
+        timeValue: document.querySelector("[name=timeValue]").value
+      };
+
+      await signInAndSubmit(formData);
+    });
+  });
+</script>
 </body>
 </html>
