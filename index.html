@@ -107,7 +107,6 @@
     </form>
   </div>
 
-  <script src="https://alcdn.msauth.net/browser/2.35.0/js/msal-browser.min.js"></script>
   <script>
     const members = {
       "Team Alpha": ["Alice", "Aaron"],
@@ -127,71 +126,9 @@
       });
     }
 
-    const msalConfig = {
-      auth: {
-        clientId: "7d23d831-b0e3-460a-8403-2ecf8dec255e",
-        authority: "https://login.microsoftonline.com/ce489f49-6a08-487c-bc9c-7d75078824ea",
-        redirectUri: window.location.href
-      }
-    };
-
-    const msalInstance = new msal.PublicClientApplication(msalConfig);
-    const scopes = ["Files.ReadWrite", "User.Read"];
-
-    async function signInAndSubmit(formData) {
-      try {
-        let account = msalInstance.getActiveAccount();
-        if (!account) {
-          const loginResponse = await msalInstance.loginPopup({ scopes });
-          account = loginResponse.account;
-          msalInstance.setActiveAccount(account);
-        }
-
-        let tokenResponse;
-        try {
-          tokenResponse = await msalInstance.acquireTokenSilent({ scopes, account });
-        } catch {
-          tokenResponse = await msalInstance.acquireTokenPopup({ scopes });
-        }
-
-        const accessToken = tokenResponse.accessToken;
-
-        const timestamp = new Date().toLocaleString("en-US", {
-          year: "numeric", month: "2-digit", day: "2-digit",
-          hour: "2-digit", minute: "2-digit", hour12: true
-        });
-
-        const row = {
-          values: [[timestamp, formData.team, formData.member, formData.activity, formData.timeValue]]
-        };
-
-        const response = await fetch(
-          "https://graph.microsoft.com/v1.0/me/drive/root:/Jacked%20In%20June/2025/Jacked%20In%20June%202025.xlsx:/workbook/tables/Submissions/rows/add",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(row)
-          }
-        );
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Graph API Error: ${response.status} - ${errorText}`);
-        }
-
-        return true;
-
-      } catch (error) {
-        console.error("❌ Submission failed:", error);
-        return false;
-      }
-    }
-
     document.addEventListener("DOMContentLoaded", function () {
       populateMembers();
+
       const form = document.getElementById("teamForm");
       const timeInput = document.querySelector("[name=timeValue]");
       const container = document.querySelector(".container");
@@ -224,18 +161,27 @@
           timeValue
         };
 
-        const success = await signInAndSubmit(formData);
+        try {
+          const response = await fetch("https://script.google.com/macros/s/AKfycbzFkdoayt9otovllR8QEYmHiPM3jNaMcc_T4NWejfmvELmFpfnEEaOVGjUgeeNNbS9xjw/exec", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+          });
 
-        if (success) {
-          form.style.display = "none";
-          const thankYou = document.createElement("div");
-          thankYou.innerHTML = `
-            <img src="01. IMW Logo - Blue.png" alt="IMW Logo" class="logo" style="width:160px;margin-bottom:20px;">
-            <h2>Thanks for your submission!</h2>
-          `;
-          container.appendChild(thankYou);
-        } else {
-          alert("❌ Submission failed. Please try again or contact IT.");
+          if (response.ok) {
+            form.style.display = "none";
+            const thankYou = document.createElement("div");
+            thankYou.innerHTML = `
+              <img src="01. IMW Logo - Blue.png" alt="IMW Logo" class="logo" style="width:160px;margin-bottom:20px;">
+              <h2>Thanks for your submission!</h2>
+            `;
+            container.appendChild(thankYou);
+          } else {
+            throw new Error("Google Script error");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("❌ Submission failed. Please try again.");
         }
       });
     });
