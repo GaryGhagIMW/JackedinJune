@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Team Submission Form</title>
+</head>
+<body>
+  <form id="teamForm">
+    <label for="team">Team:</label>
+    <select id="team" name="team" onchange="populateMembers()">
+      <option value="Team Alpha">Team Alpha</option>
+      <option value="Team Beta">Team Beta</option>
+    </select><br><br>
+
+    <label for="member">Member:</label>
+    <select id="member" name="member"></select><br><br>
+
+    <label for="activity">Activity:</label>
+    <select name="activity">
+      <option value="Running">Running</option>
+      <option value="Cycling">Cycling</option>
+    </select><br><br>
+
+    <label for="timeValue">Time or Distance:</label>
+    <input type="text" name="timeValue"><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    const members = {
+      "Team Alpha": ["Alice", "Aaron"],
+      "Team Beta": ["Bob", "Bella"]
+    };
+
+    function populateMembers() {
+      const team = document.getElementById("team").value;
+      const memberSelect = document.getElementById("member");
+      memberSelect.innerHTML = "";
+
+      members[team].forEach(member => {
+        const option = document.createElement("option");
+        option.value = member;
+        option.textContent = member;
+        memberSelect.appendChild(option);
+      });
+    }
+
+    document.getElementById("teamForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const formData = {
+        team: document.getElementById("team").value,
+        member: document.getElementById("member").value,
+        activity: document.querySelector("[name=activity]").value,
+        timeValue: document.querySelector("[name=timeValue]").value
+      };
+
+      await fetch("https://prod-XXXXXXX.webhook.office.com/webhookb2/XXXX", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      alert("Submitted!");
+    });
+
+    // Populate members initially
+    populateMembers();
+  </script>
+</body>
+</html>
