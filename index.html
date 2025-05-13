@@ -84,24 +84,38 @@
   <div class="container">
     <img src="01. IMW Logo - Blue.png" alt="IMW Logo" class="logo">
     <h1>JACKED IN JUNE 2025</h1>
-    <form id="teamForm">
+
+    <form 
+      method="POST" 
+      action="https://script.google.com/macros/s/AKfycbxpBlZ5loAzTBhRQv4_aTVwO7roMsgcWZJvqNGlWUpGvlGSZi61IJgW1aqdeIk2v9D-Pg/exec"
+      onsubmit="document.getElementById('timestamp').value = new Date().toLocaleString('en-US', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: true
+      });"
+      id="teamForm"
+    >
+
+      <!-- Hidden Timestamp Field -->
+      <input type="hidden" name="Timestamp" id="timestamp">
+
       <label for="team">Team:</label>
-      <select id="team" name="team" onchange="populateMembers()">
+      <select id="team" name="Team" onchange="populateMembers()">
         <option value="Team Alpha">Team Alpha</option>
         <option value="Team Beta">Team Beta</option>
       </select>
 
       <label for="member">Member:</label>
-      <select id="member" name="member"></select>
+      <select id="member" name="Member"></select>
 
       <label for="activity">Activity:</label>
-      <select name="activity">
+      <select name="Activity">
         <option value="Running">Running</option>
         <option value="Cycling">Cycling</option>
       </select>
 
       <label for="timeValue">Time:</label>
-      <input type="text" name="timeValue" placeholder="E.g. 1.5 for 1 hour 30 mins">
+      <input type="text" name="TimeValue" placeholder="E.g. 1.5 for 1 hour 30 mins" required pattern="^[0-9]+(\.[0-9]+)?$" title="Enter time as a number, e.g. 1.5 for 1 hour 30 mins">
 
       <button type="submit">Submit</button>
     </form>
@@ -126,65 +140,7 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      populateMembers();
-
-      const form = document.getElementById("teamForm");
-      const timeInput = document.querySelector("[name=timeValue]");
-      const container = document.querySelector(".container");
-
-      form.addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        const timeValue = timeInput.value.trim();
-        if (!/^[0-9]+(\.[0-9]+)?$/.test(timeValue)) {
-          timeInput.style.borderColor = "red";
-          if (!document.getElementById("errorMsg")) {
-            const errorMsg = document.createElement("div");
-            errorMsg.id = "errorMsg";
-            errorMsg.style.color = "red";
-            errorMsg.style.marginTop = "10px";
-            errorMsg.innerText = "Please enter only your time value. E.g., 1 hour 30 min = 1.5";
-            form.appendChild(errorMsg);
-          }
-          return;
-        } else {
-          timeInput.style.borderColor = "#ccc";
-          const existing = document.getElementById("errorMsg");
-          if (existing) existing.remove();
-        }
-
-        const formData = {
-          team: document.getElementById("team").value,
-          member: document.getElementById("member").value,
-          activity: document.querySelector("[name=activity]").value,
-          timeValue
-        };
-
-        try {
-          const response = await fetch("https://script.google.com/macros/s/AKfycbzFkdoayt9otovllR8QEYmHiPM3jNaMcc_T4NWejfmvELmFpfnEEaOVGjUgeeNNbS9xjw/exec", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-          });
-
-          if (response.ok) {
-            form.style.display = "none";
-            const thankYou = document.createElement("div");
-            thankYou.innerHTML = `
-              <img src="01. IMW Logo - Blue.png" alt="IMW Logo" class="logo" style="width:160px;margin-bottom:20px;">
-              <h2>Thanks for your submission!</h2>
-            `;
-            container.appendChild(thankYou);
-          } else {
-            throw new Error("Google Script error");
-          }
-        } catch (err) {
-          console.error(err);
-          alert("❌ Submission failed. Please try again.");
-        }
-      });
-    });
+    document.addEventListener("DOMContentLoaded", populateMembers);
   </script>
 </body>
 </html>
