@@ -100,8 +100,11 @@
 
       <label for="team">Team:</label>
       <select id="team" name="Team" onchange="populateMembers()">
-        <option value="Team Alpha">Team Alpha</option>
-        <option value="Team Beta">Team Beta</option>
+        <option value="Team A">Team A</option>
+        <option value="Team B">Team B</option>
+        <option value="Team C">Team C</option>
+        <option value="Team D">Team D</option>
+        <option value="Team E">Team E</option>
       </select>
 
       <label for="member">Member:</label>
@@ -110,7 +113,18 @@
       <label for="activity">Activity:</label>
       <select name="Activity">
         <option value="Running">Running</option>
-        <option value="Cycling">Cycling</option>
+        <option value="Walking">Walking</option>
+        <option value="Stationery Bike">Stationery Bike</option>
+        <option value="Road Bike">Road Bike</option>
+        <option value="Swimming">Swimming</option>
+        <option value="Weight Lifting">Weight Lifting</option>
+        <option value="Stretching / Yoga">Stretching / Yoga</option>
+        <option value="Dance">Dance</option>
+        <option value="Fitness Class">Fitness Class</option>
+        <option value="Squash">Squash</option>
+        <option value="Tennis">Tennis</option>
+        <option value="Basketball">Basketball</option>
+        <option value="Golf">Golf</option>
       </select>
 
       <label for="timeValue">Time:</label>
@@ -121,10 +135,13 @@
   </div>
 
   <script>
-    const members = {
-      "Team Alpha": ["Alice", "Aaron"],
-      "Team Beta": ["Bob", "Bella"]
-    };
+const members = {
+  "Team A": ["Elton Puglisi", "Aron Stansfeld", "Elijah Lavigne", "Torrey Froese", "Merrick Masales"],
+  "Team B": ["Nikki Watson", "Ron Parrish", "Heidi McLellan", "Todd Dempsey", "Rina Marceles"],
+  "Team C": ["Omid Basti", "Rick Temple", "Garrett Smith", "Abner Chinchilla", "Mali Lombard"],
+  "Team D": ["Colm Murphy", "Dylan Both", "Ammar Shoaib", "Brandon Johnson", "Ahmed Elsaadawy"],
+  "Team E": ["Gary Ghag", "Creigh Sullivan", "Jay Simpson", "Shari Quiring", "Vitaly Galitsky"]
+};
 
     function populateMembers() {
       const team = document.getElementById("team").value;
