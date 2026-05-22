@@ -1,0 +1,33 @@
+# Jacked in June 2026 — Cursor Project Rules
+
+## Project Overview
+
+Static GitHub Pages site for IMW's "Jacked in June" Iron Man fitness challenge.
+Users log activities and earn points; submissions go to Google Apps Script → Google Sheets.
+
+## Tech Stack
+
+- Vanilla HTML / CSS / JavaScript (no build step)
+- GitHub Pages for hosting
+- Google Apps Script for form backend
+
+## Conventions
+
+- Keep the site static — no npm/build tooling unless explicitly requested
+- Images live in `assets/images/` (web copies) and `site assets/images/` (originals)
+- Activity points and team data are defined in `js/activities.js`
+- Form submission endpoint is in `js/activities.js` as `FORM_ENDPOINT`
+- Match existing IMW branding: mountain background, white IMW logo, blue/gold accent palette
+
+## Key Files
+
+- `index.html` — main page (hero, point guide, tracker form)
+- `css/styles.css` — all styles
+- `js/activities.js` — activity config, teams, point math
+- `js/app.js` — UI logic, session management, form submit
+
+## When Editing
+
+- Update year/branding consistently across HTML and README
+- Test point calculations when changing activity definitions
+- Preserve Google Sheets field names: Timestamp, Team, Member, Activity, TimeValue, Points
