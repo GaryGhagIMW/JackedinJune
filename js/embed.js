@@ -1,22 +1,16 @@
-/** Load Excel Online embed for live charts from OneDrive */
-document.addEventListener('DOMContentLoaded', initExcelEmbed);
+/** Refresh Excel embed after new submissions */
 document.addEventListener('jij:submitted', refreshExcelEmbed);
 
-function initExcelEmbed() {
-  if (!EXCEL_EMBED_URL) return;
-
+document.addEventListener('DOMContentLoaded', () => {
   const iframe = document.getElementById('excel-embed');
-  const placeholder = document.getElementById('embed-placeholder');
-  if (!iframe) return;
-
-  iframe.src = EXCEL_EMBED_URL;
-  iframe.classList.remove('hidden');
-  placeholder?.classList.add('hidden');
-}
+  const url = window.EXCEL_EMBED_URL || (typeof EXCEL_EMBED_URL !== 'undefined' ? EXCEL_EMBED_URL : '');
+  if (iframe && url && !iframe.src) {
+    iframe.src = url;
+  }
+});
 
 function refreshExcelEmbed() {
   const iframe = document.getElementById('excel-embed');
   if (!iframe?.src) return;
-  /* Reload embed so new submissions appear in pivot charts */
   iframe.src = iframe.src;
 }
