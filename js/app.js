@@ -259,11 +259,8 @@ async function submitSession() {
 
   let submitted = false;
 
-  if (SUBMIT_MODE === 'powerautomate' || SUBMIT_MODE === 'auto') {
-    submitted = await submitToPowerAutomate(entries);
-  }
-
-  if (!submitted && (SUBMIT_MODE === 'local' || SUBMIT_MODE === 'auto')) {
+  // Local server writes directly to your OneDrive Excel file (most reliable)
+  if (SUBMIT_MODE === 'local' || SUBMIT_MODE === 'auto' || SUBMIT_MODE === 'powerautomate') {
     submitted = await submitToLocalServer(entries);
   }
 
@@ -283,40 +280,8 @@ async function submitSession() {
     sessionLog = [];
     updateSessionUI();
   } else {
-    showToast('Could not submit. Check Power Automate URL in js/config.js or start the local server.', 'error');
+    showToast('Could not submit. Run start-server.bat on your PC, or use CSV download mode.', 'error');
   }
-}
-
-async function submitToPowerAutomate(entries) {
-  if (!POWER_AUTOMATE_URL) return false;
-
-  let successCount = 0;
-
-  for (const entry of entries) {
-    const headers = { 'Content-Type': 'application/json' };
-    if (POWER_AUTOMATE_KEY) headers['X-JIJ-Key'] = POWER_AUTOMATE_KEY;
-
-    try {
-      await fetch(POWER_AUTOMATE_URL, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(entry),
-        mode: 'no-cors',
-      });
-      successCount++;
-    } catch {
-      return false;
-    }
-  }
-
-  if (successCount === entries.length) {
-    showToast(
-      `🎉 ${successCount} activit${successCount === 1 ? 'y' : 'ies'} submitted to OneDrive / SharePoint!`,
-      'success'
-    );
-    return true;
-  }
-  return false;
 }
 
 async function submitToLocalServer(entries) {
@@ -326,18 +291,25 @@ async function submitToLocalServer(entries) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ entries }),
     });
-    if (!res.ok) return false;
     const data = await res.json();
-    if (data.ok) {
+    if (res.ok && data.ok) {
       showToast(
-        `🎉 ${data.count} activit${data.count === 1 ? 'y' : 'ies'} saved to server!`,
+        `🎉 ${data.count} activit${data.count === 1 ? 'y' : 'ies'} saved to OneDrive Excel!`,
         'success'
       );
       return true;
     }
+    if (!res.ok && data.error) {
+      showToast(`Submit failed: ${data.error}`, 'error');
+    }
   } catch {
     /* local server not running */
   }
+  return false;
+}
+
+/** Browser cannot call the current Power Automate URL (requires OAuth). Reserved for future use. */
+async function submitToPowerAutomate() {
   return false;
 }
 

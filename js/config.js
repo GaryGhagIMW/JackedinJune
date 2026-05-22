@@ -23,7 +23,7 @@ const POWER_AUTOMATE_KEY = '';
  * local          — local server only (start-server.bat)
  * download       — CSV download only
  */
-const SUBMIT_MODE = 'powerautomate';
+const SUBMIT_MODE = 'auto';
 
 /** Local API when running start-server.bat */
 const LOCAL_API = '/api/submit';

@@ -193,11 +193,29 @@ git push origin main
 
 | Problem | Fix |
 |---------|-----|
-| No rows in Excel | Check Power Automate run history for errors; verify table name is `Submissions` |
+| No rows in Excel | **Close the Excel file** before submitting — it must not be open in Excel |
+| No Power Automate run history | The HTTP POST URL requires OAuth and won't work from a browser — use `start-server.bat` instead |
+| Wrong Power Automate URL | Copy the URL from the trigger card — it must contain `sig=` at the end (see below) |
 | Flow never triggers | Confirm URL in `js/config.js` matches the trigger URL exactly |
-| 403 in run history | `POWER_AUTOMATE_KEY` doesn't match the flow condition |
-| CORS errors in console | Expected with `no-cors` — ignore if run history shows success |
-| Wrong OneDrive file | Re-select file path in the Excel Online action |
+| Submit failed error | Close Excel, run `start-server.bat`, use http://localhost:3000 |
+
+### Power Automate URL not working?
+
+If your URL looks like this (no `sig=` parameter):
+```
+.../powerautomate/automations/direct/workflows/.../invoke?api-version=1
+```
+
+It **requires OAuth** and cannot receive anonymous submissions from the website.
+
+You need the **HTTP POST URL** from the trigger card, which looks like:
+```
+https://prod-XX.westus.logic.azure.com/workflows/.../triggers/manual/paths/invoke?api-version=2016-06-01&sp=...&sig=...
+```
+
+In Power Automate → open your flow → **When a HTTP request is received** → copy **HTTP POST URL** from that trigger step specifically.
+
+**Recommended instead:** run `start-server.bat` — submissions write directly to your OneDrive Excel file with no Power Automate needed.
 
 ---
 

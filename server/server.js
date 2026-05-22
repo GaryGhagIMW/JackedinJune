@@ -1,27 +1,32 @@
 /**
  * Jacked in June 2026 — local submission server
  *
- * Serves the static site and appends form entries to a CSV file on this PC.
- * CSV opens directly in Excel; save as .xlsx if you prefer that format.
+ * Serves the static site and writes submissions directly to your OneDrive Excel file.
  *
- * Usage:  node server/server.js
- *         (or double-click start-server.bat)
- *
+ * Usage:  node server/server.js  (or double-click start-server.bat)
  * Site:   http://localhost:3000
- * Data:   data/jij-2026-submissions.csv
  */
 
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
+const { execFile } = require('child_process');
 
 const PORT = process.env.PORT || 3000;
 const ROOT = path.join(__dirname, '..');
-const DATA_DIR = path.join(ROOT, 'data');
-const CSV_FILE = path.join(DATA_DIR, 'jij-2026-submissions.csv');
+const PS_SCRIPT = path.join(__dirname, 'append-onedrive.ps1');
 
-const HEADERS = ['Timestamp', 'Team', 'Member', 'Activity', 'DurationMinutes', 'Steps', 'Points'];
+// Read Power Automate URL from config.js (simple parse, no eval)
+function readPowerAutomateUrl() {
+  try {
+    const config = fs.readFileSync(path.join(ROOT, 'js', 'config.js'), 'utf8');
+    const match = config.match(/const POWER_AUTOMATE_URL\s*=\s*['"]([^'"]+)['"]/);
+    return match ? match[1] : '';
+  } catch {
+    return '';
+  }
+}
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -34,27 +39,6 @@ const MIME = {
   '.json': 'application/json',
   '.md': 'text/markdown; charset=utf-8',
 };
-
-function ensureDataFile() {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-  if (!fs.existsSync(CSV_FILE)) {
-    fs.writeFileSync(CSV_FILE, HEADERS.join(',') + '\n', 'utf8');
-  }
-}
-
-function escapeCsv(value) {
-  const str = String(value ?? '');
-  if (/[",\n\r]/.test(str)) return `"${str.replace(/"/g, '""')}"`;
-  return str;
-}
-
-function appendRows(entries) {
-  ensureDataFile();
-  const lines = entries.map((e) =>
-    HEADERS.map((h) => escapeCsv(e[h])).join(',')
-  );
-  fs.appendFileSync(CSV_FILE, lines.join('\n') + '\n', 'utf8');
-}
 
 function readBody(req) {
   return new Promise((resolve, reject) => {
@@ -69,6 +53,49 @@ function readBody(req) {
     });
     req.on('error', reject);
   });
+}
+
+function appendToOneDrive(entries) {
+  return new Promise((resolve, reject) => {
+    execFile(
+      'powershell.exe',
+      [
+        '-NoProfile',
+        '-ExecutionPolicy',
+        'Bypass',
+        '-File',
+        PS_SCRIPT,
+        '-EntriesJson',
+        JSON.stringify(entries),
+      ],
+      { maxBuffer: 1024 * 1024 },
+      (err, stdout, stderr) => {
+        if (err) return reject(new Error(stderr || err.message));
+        try {
+          resolve(JSON.parse(stdout.trim()));
+        } catch {
+          reject(new Error(stdout || 'Unknown PowerShell error'));
+        }
+      }
+    );
+  });
+}
+
+async function proxyToPowerAutomate(entry) {
+  const url = readPowerAutomateUrl();
+  if (!url) throw new Error('POWER_AUTOMATE_URL not configured');
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(entry),
+  });
+
+  const text = await res.text();
+  if (!res.ok) {
+    throw new Error(`Power Automate ${res.status}: ${text}`);
+  }
+  return { status: res.status, body: text };
 }
 
 function serveStatic(filePath, res) {
@@ -106,29 +133,27 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({ ok: false, error: 'No entries provided' }));
         return;
       }
-      appendRows(entries);
+
+      const result = await appendToOneDrive(entries);
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ ok: true, count: entries.length, file: CSV_FILE }));
+      res.end(JSON.stringify(result));
     } catch (err) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ ok: false, error: err.message }));
     }
     return;
   }
 
-  if (url.pathname === '/api/status' && req.method === 'GET') {
-    ensureDataFile();
-    const stat = fs.statSync(CSV_FILE);
-    const lines = fs.readFileSync(CSV_FILE, 'utf8').trim().split('\n');
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(
-      JSON.stringify({
-        ok: true,
-        file: CSV_FILE,
-        submissions: Math.max(0, lines.length - 1),
-        lastModified: stat.mtime,
-      })
-    );
+  if (url.pathname === '/api/test-powerautomate' && req.method === 'POST') {
+    try {
+      const entry = await readBody(req);
+      const result = await proxyToPowerAutomate(entry);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: true, ...result }));
+    } catch (err) {
+      res.writeHead(502, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ ok: false, error: err.message }));
+    }
     return;
   }
 
@@ -147,15 +172,13 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
-ensureDataFile();
 server.listen(PORT, () => {
   console.log('');
   console.log('  Jacked in June 2026 — local server running');
   console.log('  -------------------------------------------');
   console.log(`  Website:     http://localhost:${PORT}`);
-  console.log(`  Submissions: ${CSV_FILE}`);
+  console.log('  Submissions: OneDrive Excel (jij-2026-submissions.xlsx)');
   console.log('');
-  console.log('  Keep this window open while collecting entries.');
-  console.log('  Open the CSV in Excel anytime to review submissions.');
+  console.log('  Close Excel before submitting if rows fail to append.');
   console.log('');
 });
