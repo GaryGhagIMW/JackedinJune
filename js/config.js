@@ -10,7 +10,7 @@
 
 /** Power Automate HTTP trigger URL (from flow trigger → HTTP POST URL) */
 const POWER_AUTOMATE_URL =
-  'https://defaultce489f496a08487cbc9c7d75078824.ea.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/af77d0edadc4474b9ec573429e61e93b/triggers/manual/paths/invoke?api-version=1';
+  'https://defaultce489f496a08487cbc9c7d75078824.ea.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/af77d0edadc4474b9ec573429e61e93b/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=d2g2SfJGCRBcmpm-bM7JKbPu12TmGHeyjchrjX40qTg';
 
 /** Optional shared secret — set the same value in your Power Automate flow condition */
 const POWER_AUTOMATE_KEY = '';

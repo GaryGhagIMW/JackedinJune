@@ -259,8 +259,13 @@ async function submitSession() {
 
   let submitted = false;
 
-  // Local server writes directly to your OneDrive Excel file (most reliable)
-  if (SUBMIT_MODE === 'local' || SUBMIT_MODE === 'auto' || SUBMIT_MODE === 'powerautomate') {
+  // Power Automate — works for all users via GitHub Pages
+  if (SUBMIT_MODE === 'powerautomate' || SUBMIT_MODE === 'auto') {
+    submitted = await submitToPowerAutomate(entries);
+  }
+
+  // Local server fallback (when start-server.bat is running on this PC)
+  if (!submitted && (SUBMIT_MODE === 'local' || SUBMIT_MODE === 'auto')) {
     submitted = await submitToLocalServer(entries);
   }
 
@@ -280,7 +285,7 @@ async function submitSession() {
     sessionLog = [];
     updateSessionUI();
   } else {
-    showToast('Could not submit. Run start-server.bat on your PC, or use CSV download mode.', 'error');
+    showToast('Could not submit. Check your connection and try again.', 'error');
   }
 }
 
@@ -308,9 +313,30 @@ async function submitToLocalServer(entries) {
   return false;
 }
 
-/** Browser cannot call the current Power Automate URL (requires OAuth). Reserved for future use. */
-async function submitToPowerAutomate() {
-  return false;
+async function submitToPowerAutomate(entries) {
+  if (!POWER_AUTOMATE_URL || !POWER_AUTOMATE_URL.includes('sig=')) return false;
+
+  for (const entry of entries) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (POWER_AUTOMATE_KEY) headers['X-JIJ-Key'] = POWER_AUTOMATE_KEY;
+
+    try {
+      await fetch(POWER_AUTOMATE_URL, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(entry),
+        mode: 'no-cors',
+      });
+    } catch {
+      return false;
+    }
+  }
+
+  showToast(
+    `🎉 ${entries.length} activit${entries.length === 1 ? 'y' : 'ies'} submitted!`,
+    'success'
+  );
+  return true;
 }
 
 function downloadEntriesCsv(entries) {
