@@ -3,7 +3,7 @@
 ## Project Overview
 
 Static GitHub Pages site for IMW's "Jacked in June" Iron Man fitness challenge.
-Users log activities and earn points; submissions go to Google Apps Script → Google Sheets.
+Users log activities and earn points; submissions save to a local CSV via server/server.js or download as CSV.
 
 ## Tech Stack
 

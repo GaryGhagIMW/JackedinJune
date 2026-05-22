@@ -1,0 +1,3 @@
+# Submission data — do not commit participant entries to git
+*.csv
+!/.gitkeep

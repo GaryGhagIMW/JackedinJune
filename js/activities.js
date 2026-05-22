@@ -185,9 +185,20 @@ const TEAMS = {
   },
 };
 
-/** Google Apps Script endpoint (existing JIJ form backend) */
-const FORM_ENDPOINT =
-  'https://script.google.com/macros/s/AKfycbwS25oS1rtOx7QjP-613ouJP1CQ8pKuhki-jzo2qdrgqy_gAL0rZblM0YgjtQf9S1Oq/exec';
+/**
+ * Submission backend config
+ *
+ * auto     — try local server first, fall back to CSV download
+ * local    — local server only (http://localhost:3000 when running start-server.bat)
+ * download — always download a CSV file to the user's PC
+ */
+const SUBMIT_MODE = 'auto';
+
+/** Local API (same origin when served via server/server.js) */
+const LOCAL_API = '/api/submit';
+
+/** Legacy Google Apps Script — disabled; use local server or CSV download instead */
+const FORM_ENDPOINT = null;
 
 function getActivityById(id) {
   return ACTIVITIES.find((a) => a.id === id);

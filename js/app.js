@@ -247,39 +247,84 @@ async function submitSession() {
     hour12: true,
   });
 
-  let successCount = 0;
+  const entries = sessionLog.map((entry) => ({
+    Timestamp: timestamp,
+    Team: entry.team,
+    Member: entry.member,
+    Activity: entry.activityName,
+    TimeValue:
+      entry.steps > 0 && entry.minutes <= 0
+        ? String(entry.steps) + ' steps'
+        : String(entry.minutes),
+    Points: String(entry.points),
+  }));
 
-  for (const entry of sessionLog) {
-    const formData = new FormData();
-    formData.append('Timestamp', timestamp);
-    formData.append('Team', entry.team);
-    formData.append('Member', entry.member);
-    formData.append('Activity', entry.activityName);
-    formData.append(
-      'TimeValue',
-      entry.steps > 0 && entry.minutes <= 0 ? String(entry.steps) + ' steps' : String(entry.minutes)
+  let submitted = false;
+
+  if (SUBMIT_MODE === 'local' || SUBMIT_MODE === 'auto') {
+    submitted = await submitToLocalServer(entries);
+  }
+
+  if (!submitted && (SUBMIT_MODE === 'download' || SUBMIT_MODE === 'auto')) {
+    downloadEntriesCsv(entries);
+    submitted = true;
+    showToast(
+      `Saved ${entries.length} activit${entries.length === 1 ? 'y' : 'ies'} as CSV download. Email the file to your admin or place it in the data folder.`,
+      'success'
     );
-    formData.append('Points', String(entry.points));
-
-    try {
-      await fetch(FORM_ENDPOINT, { method: 'POST', body: formData, mode: 'no-cors' });
-      successCount++;
-    } catch {
-      /* no-cors hides response; assume sent */
-      successCount++;
-    }
   }
 
   submitBtn.textContent = 'Submit All Activities';
   submitBtn.disabled = false;
 
-  if (successCount === sessionLog.length) {
-    showToast(`🎉 ${successCount} activit${successCount === 1 ? 'y' : 'ies'} submitted!`, 'success');
+  if (submitted) {
     sessionLog = [];
     updateSessionUI();
   } else {
-    showToast('Some submissions may have failed. Please try again.', 'error');
+    showToast('Could not submit. Start the local server or use CSV download mode.', 'error');
   }
+}
+
+async function submitToLocalServer(entries) {
+  try {
+    const res = await fetch(LOCAL_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ entries }),
+    });
+    if (!res.ok) return false;
+    const data = await res.json();
+    if (data.ok) {
+      showToast(
+        `🎉 ${data.count} activit${data.count === 1 ? 'y' : 'ies'} saved to server!`,
+        'success'
+      );
+      return true;
+    }
+  } catch {
+    /* local server not running */
+  }
+  return false;
+}
+
+function downloadEntriesCsv(entries) {
+  const headers = ['Timestamp', 'Team', 'Member', 'Activity', 'TimeValue', 'Points'];
+  const escape = (v) => {
+    const s = String(v ?? '');
+    return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const rows = [
+    headers.join(','),
+    ...entries.map((e) => headers.map((h) => escape(e[h])).join(',')),
+  ];
+  const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const stamp = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `jij-2026-submission-${stamp}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function showToast(message, type = 'info') {
