@@ -252,10 +252,8 @@ async function submitSession() {
     Team: entry.team,
     Member: entry.member,
     Activity: entry.activityName,
-    TimeValue:
-      entry.steps > 0 && entry.minutes <= 0
-        ? String(entry.steps) + ' steps'
-        : String(entry.minutes),
+    DurationMinutes: entry.minutes > 0 ? String(entry.minutes) : '',
+    Steps: entry.steps > 0 ? String(entry.steps) : '',
     Points: String(entry.points),
   }));
 
@@ -344,7 +342,7 @@ async function submitToLocalServer(entries) {
 }
 
 function downloadEntriesCsv(entries) {
-  const headers = ['Timestamp', 'Team', 'Member', 'Activity', 'TimeValue', 'Points'];
+  const headers = ['Timestamp', 'Team', 'Member', 'Activity', 'DurationMinutes', 'Steps', 'Points'];
   const escape = (v) => {
     const s = String(v ?? '');
     return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;

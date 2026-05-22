@@ -30,4 +30,4 @@ Static GitHub Pages site for IMW's "Jacked in June" Iron Man fitness challenge.
 
 - Update year/branding consistently across HTML and README
 - Test point calculations when changing activity definitions
-- Preserve Google Sheets field names: Timestamp, Team, Member, Activity, TimeValue, Points
+- Preserve field names: Timestamp, Team, Member, Activity, DurationMinutes, Steps, Points

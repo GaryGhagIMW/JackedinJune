@@ -26,14 +26,37 @@ After setup, paste the HTTP trigger URL into `js/config.js` and push to GitHub.
 3. Create a new Excel workbook: `jij-2026-submissions.xlsx`
 4. In row 1, add these column headers:
 
-   | Timestamp | Team | Member | Activity | TimeValue | Points |
-   |-----------|------|--------|----------|-----------|--------|
+   | Timestamp | Team | Member | Activity | DurationMinutes | Steps | Points |
+   |-----------|------|--------|----------|-----------------|-------|--------|
+
+   - **DurationMinutes** — time-based entries (running, biking, walking by time, etc.)
+   - **Steps** — walking entries logged by step count instead of minutes
+   - Only one is filled per row; the other stays blank
 
 5. Select the header row + one empty row below → **Insert → Table** → check "My table has headers"
 6. Name the table **`Submissions`** (Table Design → Table Name)
 7. Save — the file stays in your OneDrive
 
 > You can also upload `docs/jij-2026-submissions-template.csv` to OneDrive, open in Excel Online, and convert to a table.
+
+### How steps vs. time appear in Excel
+
+Walking is the only activity that accepts **either** minutes **or** steps. Every other activity uses minutes only.
+
+| What the user enters | DurationMinutes | Steps | Points (example) |
+|----------------------|-----------------|-------|------------------|
+| 45 min running | `45` | *(blank)* | 7.5 |
+| 60 min walking | `60` | *(blank)* | 5 |
+| 8,000 steps walking | *(blank)* | `8000` | 10 |
+| 30 min swimming | `30` | *(blank)* | 5 |
+
+In Excel you can:
+- **Filter** the `Steps` column → "is not blank" to see all step-based walking entries
+- **Sum** `Steps` by Member (pivot table) for total steps per person
+- **Sum** `DurationMinutes` for total active minutes on time-based activities
+- **Sum** `Points` for leaderboard totals
+
+If someone enters both minutes and steps for walking, both columns are saved; points use whichever method scores higher (4,000 steps = 1 hour walking = 5 pts).
 
 ### Option B — SharePoint List
 
@@ -47,9 +70,10 @@ After setup, paste the HTTP trigger URL into `js/config.js` and push to GitHub.
    | Timestamp   | Single line of text |
    | Team        | Single line of text |
    | Member      | Single line of text |
-   | Activity    | Single line of text |
-   | TimeValue   | Single line of text |
-   | Points      | Single line of text |
+   | Activity          | Single line of text |
+   | DurationMinutes   | Number (blank if logged by steps) |
+   | Steps             | Number (blank if logged by time) |
+   | Points            | Number |
 
 ---
 
@@ -69,7 +93,8 @@ After setup, paste the HTTP trigger URL into `js/config.js` and push to GitHub.
     "Team": { "type": "string" },
     "Member": { "type": "string" },
     "Activity": { "type": "string" },
-    "TimeValue": { "type": "string" },
+    "DurationMinutes": { "type": "string" },
+    "Steps": { "type": "string" },
     "Points": { "type": "string" }
   }
 }
@@ -96,7 +121,8 @@ Map dynamic content from the HTTP trigger:
 | Team | Team |
 | Member | Member |
 | Activity | Activity |
-| TimeValue | TimeValue |
+| DurationMinutes | DurationMinutes |
+| Steps | Steps |
 | Points | Points |
 
 ### For SharePoint List (Option B)

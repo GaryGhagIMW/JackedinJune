@@ -21,7 +21,7 @@ const ROOT = path.join(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'data');
 const CSV_FILE = path.join(DATA_DIR, 'jij-2026-submissions.csv');
 
-const HEADERS = ['Timestamp', 'Team', 'Member', 'Activity', 'TimeValue', 'Points'];
+const HEADERS = ['Timestamp', 'Team', 'Member', 'Activity', 'DurationMinutes', 'Steps', 'Points'];
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
