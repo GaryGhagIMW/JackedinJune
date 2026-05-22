@@ -186,19 +186,9 @@ const TEAMS = {
 };
 
 /**
- * Submission backend config
- *
- * auto     — try local server first, fall back to CSV download
- * local    — local server only (http://localhost:3000 when running start-server.bat)
- * download — always download a CSV file to the user's PC
+ * Submission backend — configured in js/config.js
+ * See docs/microsoft-setup.md for OneDrive / SharePoint setup.
  */
-const SUBMIT_MODE = 'auto';
-
-/** Local API (same origin when served via server/server.js) */
-const LOCAL_API = '/api/submit';
-
-/** Legacy Google Apps Script — disabled; use local server or CSV download instead */
-const FORM_ENDPOINT = null;
 
 function getActivityById(id) {
   return ACTIVITIES.find((a) => a.id === id);

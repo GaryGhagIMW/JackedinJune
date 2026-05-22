@@ -261,7 +261,11 @@ async function submitSession() {
 
   let submitted = false;
 
-  if (SUBMIT_MODE === 'local' || SUBMIT_MODE === 'auto') {
+  if (SUBMIT_MODE === 'powerautomate' || SUBMIT_MODE === 'auto') {
+    submitted = await submitToPowerAutomate(entries);
+  }
+
+  if (!submitted && (SUBMIT_MODE === 'local' || SUBMIT_MODE === 'auto')) {
     submitted = await submitToLocalServer(entries);
   }
 
@@ -269,7 +273,7 @@ async function submitSession() {
     downloadEntriesCsv(entries);
     submitted = true;
     showToast(
-      `Saved ${entries.length} activit${entries.length === 1 ? 'y' : 'ies'} as CSV download. Email the file to your admin or place it in the data folder.`,
+      `Saved ${entries.length} activit${entries.length === 1 ? 'y' : 'ies'} as CSV download. Email the file to your admin.`,
       'success'
     );
   }
@@ -281,8 +285,40 @@ async function submitSession() {
     sessionLog = [];
     updateSessionUI();
   } else {
-    showToast('Could not submit. Start the local server or use CSV download mode.', 'error');
+    showToast('Could not submit. Check Power Automate URL in js/config.js or start the local server.', 'error');
   }
+}
+
+async function submitToPowerAutomate(entries) {
+  if (!POWER_AUTOMATE_URL) return false;
+
+  let successCount = 0;
+
+  for (const entry of entries) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (POWER_AUTOMATE_KEY) headers['X-JIJ-Key'] = POWER_AUTOMATE_KEY;
+
+    try {
+      await fetch(POWER_AUTOMATE_URL, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(entry),
+        mode: 'no-cors',
+      });
+      successCount++;
+    } catch {
+      return false;
+    }
+  }
+
+  if (successCount === entries.length) {
+    showToast(
+      `🎉 ${successCount} activit${successCount === 1 ? 'y' : 'ies'} submitted to OneDrive / SharePoint!`,
+      'success'
+    );
+    return true;
+  }
+  return false;
 }
 
 async function submitToLocalServer(entries) {
