@@ -27,3 +27,9 @@ const SUBMIT_MODE = 'auto';
 
 /** Local API when running start-server.bat */
 const LOCAL_API = '/api/submit';
+
+/**
+ * Dashboard read URL — optional Power Automate flow that returns Excel rows as JSON.
+ * See docs/dashboard-setup.md. Falls back to /api/dashboard when using start-server.bat.
+ */
+const DASHBOARD_URL = '';

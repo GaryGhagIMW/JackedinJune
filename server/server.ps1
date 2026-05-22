@@ -150,6 +150,22 @@ try {
       continue
     }
 
+    if ($path -eq '/api/dashboard' -and $request.HttpMethod -eq 'GET') {
+      $context.Response.AddHeader('Access-Control-Allow-Origin', '*')
+      try {
+        $readScript = Join-Path $PSScriptRoot 'read-onedrive.ps1'
+        $output = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $readScript 2>&1
+        $parsed = $output | ConvertFrom-Json
+        if ($parsed.error) { throw $parsed.error }
+        $rows = if ($parsed -is [Array]) { $parsed } else { @($parsed) }
+        Write-JsonResponse $context 200 @{ ok = $true; rows = $rows }
+      }
+      catch {
+        Write-JsonResponse $context 500 @{ ok = $false; error = $_.Exception.Message; rows = @() }
+      }
+      continue
+    }
+
     $file = Get-StaticFile $path
     if ($file) {
       $ext = [IO.Path]::GetExtension($file).ToLower()

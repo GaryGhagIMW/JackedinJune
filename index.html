@@ -16,6 +16,7 @@
     <nav class="nav-links">
       <a href="#points">Point Guide</a>
       <a href="#track">Log Activity</a>
+      <a href="#dashboard">Leaderboard</a>
       <a href="https://imwca.sharepoint.com/SitePages/Home.aspx" class="btn-back" target="_blank" rel="noopener">Back to Homepage</a>
     </nav>
   </header>
@@ -128,6 +129,64 @@
         Submissions save to the team OneDrive Excel file automatically.
       </div>
     </section>
+
+    <section id="dashboard" class="section reveal">
+      <div class="section-header dashboard-header">
+        <div>
+          <h2>Live Leaderboard &amp; Stats</h2>
+          <p id="dashboard-status">Loading stats…</p>
+        </div>
+        <div class="dashboard-meta">
+          <span id="dashboard-updated"></span>
+          <button type="button" class="btn btn-secondary btn-sm" id="dashboard-refresh">Refresh</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-value" id="kpi-total-points">0</span>
+          <span class="kpi-label">Total Points</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-value" id="kpi-total-entries">0</span>
+          <span class="kpi-label">Activities Logged</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-value" id="kpi-active-members">0</span>
+          <span class="kpi-label">Active Members</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-value kpi-value-sm" id="kpi-top-activity">—</span>
+          <span class="kpi-label">Top Activity</span>
+        </div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h3>Points by Team</h3>
+          <div class="chart-wrap"><canvas id="chart-teams"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Top Members</h3>
+          <div class="chart-wrap"><canvas id="chart-members"></canvas></div>
+        </div>
+        <div class="chart-card chart-card-wide">
+          <h3>Points by Activity</h3>
+          <div class="chart-wrap chart-wrap-doughnut"><canvas id="chart-activities"></canvas></div>
+        </div>
+      </div>
+
+      <div class="leaderboard-grid">
+        <div class="leaderboard-card">
+          <h3>Team Standings</h3>
+          <ol class="leaderboard-list" id="leaderboard-teams"></ol>
+        </div>
+        <div class="leaderboard-card">
+          <h3>Member Standings</h3>
+          <ol class="leaderboard-list" id="leaderboard-members"></ol>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -136,6 +195,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/activities.js"></script>
   <script>
@@ -149,5 +209,6 @@
     `).join('');
   </script>
   <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
 </body>
 </html>

@@ -28,25 +28,39 @@ function populateTeams() {
   const memberSelect = document.getElementById('member');
   if (!teamSelect || !memberSelect) return;
 
-  teamSelect.innerHTML = Object.entries(TEAMS)
-    .map(
-      ([id, team]) =>
-        `<option value="${id}">${team.name}</option>`
-    )
-    .join('');
+  teamSelect.innerHTML =
+    '<option value="" selected disabled>— Select team —</option>' +
+    Object.entries(TEAMS)
+      .map(([id, team]) => `<option value="${id}">${team.name}</option>`)
+      .join('');
 
   teamSelect.addEventListener('change', updateMembers);
   updateMembers();
 }
 
 function updateMembers() {
-  const teamId = document.getElementById('team').value;
+  const teamId = document.getElementById('team')?.value;
   const memberSelect = document.getElementById('member');
+  if (!memberSelect) return;
+
+  if (!teamId) {
+    memberSelect.innerHTML = '<option value="" selected disabled>— Select your name —</option>';
+    memberSelect.disabled = true;
+    return;
+  }
+
+  memberSelect.disabled = false;
   const members = TEAMS[teamId]?.members ?? [];
 
-  memberSelect.innerHTML = members
-    .map((m) => `<option value="${m}">${m}</option>`)
-    .join('');
+  memberSelect.innerHTML =
+    '<option value="" selected disabled>— Select your name —</option>' +
+    members.map((m) => `<option value="${m}">${m}</option>`).join('');
+}
+
+function getTeamMemberSelection() {
+  const team = document.getElementById('team')?.value ?? '';
+  const member = document.getElementById('member')?.value ?? '';
+  return { team, member, isValid: Boolean(team && member) };
 }
 
 function bindEvents() {
@@ -128,14 +142,13 @@ function updatePreview() {
 }
 
 function addToSession() {
-  const team = document.getElementById('team')?.value;
-  const member = document.getElementById('member')?.value;
+  const { team, member, isValid } = getTeamMemberSelection();
   const activity = getActivityById(selectedActivityId);
   const { minutes, steps } = getInputValues();
   const points = calculatePoints(selectedActivityId, minutes, steps);
 
-  if (!team || !member) {
-    showToast('Please select your team and name.', 'error');
+  if (!isValid) {
+    showToast('Please choose your team and member before adding an activity.', 'error');
     return;
   }
 
@@ -284,6 +297,7 @@ async function submitSession() {
   if (submitted) {
     sessionLog = [];
     updateSessionUI();
+    window.dispatchEvent(new CustomEvent('jij:submitted'));
   } else {
     showToast('Could not submit. Check your connection and try again.', 'error');
   }
