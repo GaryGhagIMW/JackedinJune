@@ -33,4 +33,5 @@ const LOCAL_API = '/api/submit';
  * Get this from Excel Online → File → Share → Embed (see docs/excel-embed.md)
  * Paste only the src URL from the iframe embed code.
  */
-const EXCEL_EMBED_URL = '';
+const EXCEL_EMBED_URL =
+  'https://imwca-my.sharepoint.com/personal/gary_ghag_imw_ca/_layouts/15/Doc.aspx?sourcedoc={b7792ec9-e2f3-4a0b-8310-3a527001870c}&action=embedview&ActiveCell=%27Dashboard%27!A1&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True';
