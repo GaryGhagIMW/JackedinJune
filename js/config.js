@@ -9,7 +9,8 @@
  */
 
 /** Power Automate HTTP trigger URL (from flow trigger → HTTP POST URL) */
-const POWER_AUTOMATE_URL = '';
+const POWER_AUTOMATE_URL =
+  'https://defaultce489f496a08487cbc9c7d75078824.ea.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/af77d0edadc4474b9ec573429e61e93b/triggers/manual/paths/invoke?api-version=1';
 
 /** Optional shared secret — set the same value in your Power Automate flow condition */
 const POWER_AUTOMATE_KEY = '';
@@ -22,7 +23,7 @@ const POWER_AUTOMATE_KEY = '';
  * local          — local server only (start-server.bat)
  * download       — CSV download only
  */
-const SUBMIT_MODE = 'auto';
+const SUBMIT_MODE = 'powerautomate';
 
 /** Local API when running start-server.bat */
 const LOCAL_API = '/api/submit';
