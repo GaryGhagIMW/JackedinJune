@@ -121,26 +121,67 @@ const ACTIVITIES = [
   },
 ];
 
+/** Teams sourced from Signup - Jacked in June 2026.xlsx (placeholder names for now) */
 const TEAMS = {
-  'Team A': {
-    name: 'Ankle-Biting Chihuahuas',
-    members: ['Elton Puglisi', 'Aron Stansfeld', 'Elijah Lavigne', 'Torrey Froese', 'Merrick Masales'],
+  'Team 1': {
+    name: 'Team 1',
+    members: [
+      'Torrey Froese',
+      'Ariel Liang',
+      'Vitaly Galitsky',
+      'Han Xu',
+      'Edward Guo',
+      'Robert Smith',
+      'Dale Goudy',
+    ],
   },
-  'Team B': {
-    name: 'I Thought They Said Rum',
-    members: ['Nikki Watson', 'Ron Parrish', 'Heidi McLellan', 'Todd Dempsey', 'Rina Marceles'],
+  'Team 2': {
+    name: 'Team 2',
+    members: [
+      'Ammar Shoaib',
+      'Jay Simpson',
+      'Creigh Sullivan',
+      'Mark Evans',
+      'Shari Quiring',
+      'Quinn Mudge',
+      'Peyman Kanzehle',
+    ],
   },
-  'Team C': {
-    name: 'Brute Force Five (BFF)',
-    members: ['Omid Basti', 'Rick Temple', 'Garrett Smith', 'Abner Chinchilla', 'Mali Lombard'],
+  'Team 3': {
+    name: 'Team 3',
+    members: [
+      'Rina Marceles',
+      'Heidi McLellan',
+      'Nikki Watson',
+      'Milton Cordova',
+      'Todd Dempsey',
+      'Abdollah Kashkooli',
+      'Brandon Johnson',
+    ],
   },
-  'Team D': {
-    name: 'Un-Rigged',
-    members: ['Colm Murphy', 'Dylan Both', 'Ammar Shoaib', 'Brandon Johnson', 'Ahmed Elsaadawy'],
+  'Team 4': {
+    name: 'Team 4',
+    members: [
+      'Omid Basti',
+      'Mali Lombard',
+      'Colm Murphy',
+      'Gary Ghag',
+      'Aileen Wei',
+      'Aron Stansfeld',
+      'Ahmed Elsaadawy',
+    ],
   },
-  'Team E': {
-    name: 'Soreplay',
-    members: ['Gary Ghag', 'Creigh Sullivan', 'Jay Simpson', 'Shari Quiring', 'Vitaly Galitsky'],
+  'Team 5': {
+    name: 'Team 5',
+    members: [
+      'Garrett Smith',
+      'Rick Temple',
+      'Abner Chinchilla',
+      'AJ Martens',
+      'Brent Behm',
+      'Jianchao Lai',
+      'Stephane Chaland',
+    ],
   },
 };
 
