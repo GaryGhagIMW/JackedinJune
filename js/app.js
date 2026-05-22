@@ -316,27 +316,39 @@ async function submitToLocalServer(entries) {
 async function submitToPowerAutomate(entries) {
   if (!POWER_AUTOMATE_URL || !POWER_AUTOMATE_URL.includes('sig=')) return false;
 
+  let successCount = 0;
+
   for (const entry of entries) {
     const headers = { 'Content-Type': 'application/json' };
     if (POWER_AUTOMATE_KEY) headers['X-JIJ-Key'] = POWER_AUTOMATE_KEY;
 
     try {
-      await fetch(POWER_AUTOMATE_URL, {
+      const res = await fetch(POWER_AUTOMATE_URL, {
         method: 'POST',
         headers,
         body: JSON.stringify(entry),
-        mode: 'no-cors',
       });
-    } catch {
+
+      if (res.ok || res.status === 202) {
+        successCount++;
+      } else {
+        showToast(`Submit failed (${res.status}). Check Power Automate run history.`, 'error');
+        return false;
+      }
+    } catch (err) {
+      showToast(`Submit failed: ${err.message}`, 'error');
       return false;
     }
   }
 
-  showToast(
-    `🎉 ${entries.length} activit${entries.length === 1 ? 'y' : 'ies'} submitted!`,
-    'success'
-  );
-  return true;
+  if (successCount === entries.length) {
+    showToast(
+      `🎉 ${successCount} activit${successCount === 1 ? 'y' : 'ies'} submitted!`,
+      'success'
+    );
+    return true;
+  }
+  return false;
 }
 
 function downloadEntriesCsv(entries) {
