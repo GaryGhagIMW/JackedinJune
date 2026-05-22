@@ -29,7 +29,8 @@ const SUBMIT_MODE = 'auto';
 const LOCAL_API = '/api/submit';
 
 /**
- * Dashboard read URL — optional Power Automate flow that returns Excel rows as JSON.
- * See docs/dashboard-setup.md. Falls back to /api/dashboard when using start-server.bat.
+ * Excel Online embed URL for live charts / leaderboard.
+ * Get this from Excel Online → File → Share → Embed (see docs/excel-embed.md)
+ * Paste only the src URL from the iframe embed code.
  */
-const DASHBOARD_URL = '';
+const EXCEL_EMBED_URL = '';
