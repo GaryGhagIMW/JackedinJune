@@ -119,6 +119,24 @@ const ACTIVITIES = [
     inputType: 'duration',
     description: '1 hour = 7 pts',
   },
+  {
+    id: 'table-sports',
+    name: 'Table Sports',
+    icon: '🏓',
+    category: 'other',
+    pointsPerHour: 5,
+    inputType: 'duration',
+    description: '1 hour = 5 pts',
+  },
+  {
+    id: 'hiking',
+    name: 'Hiking',
+    icon: '🥾',
+    category: 'other',
+    pointsPerHour: 6,
+    inputType: 'duration',
+    description: '1 hour = 6 pts',
+  },
 ];
 
 /** Teams sourced from Signup - Jacked in June 2026.xlsx (placeholder names for now) */
