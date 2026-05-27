@@ -144,7 +144,7 @@ const ACTIVITIES = [
     category: 'other',
     pointsPerHour: 7,
     inputType: 'duration',
-    description: 'Elliptical, StairMaster, rowing, etc. — 1 hour = 7 pts',
+    description: 'Elliptical, StairMaster, Rowing, etc. — 1 hour = 7 pts',
   },
 ];
 
