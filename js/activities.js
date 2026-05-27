@@ -137,6 +137,15 @@ const ACTIVITIES = [
     inputType: 'duration',
     description: '1 hour = 6 pts',
   },
+  {
+    id: 'cardio-equipment',
+    name: 'Cardio Equipment',
+    icon: '🏃‍♂️',
+    category: 'other',
+    pointsPerHour: 7,
+    inputType: 'duration',
+    description: 'Elliptical, StairMaster, rowing, etc. — 1 hour = 7 pts',
+  },
 ];
 
 /** Teams sourced from Signup - Jacked in June 2026.xlsx (placeholder names for now) */
