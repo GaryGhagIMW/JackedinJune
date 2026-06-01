@@ -2,9 +2,11 @@
 
 ## Current setup
 
-The site embeds your Power BI share link in the Leaderboard section.
+The site uses **Embed for your organization**:
 
-**Open in browser:** [Power BI report](https://app.powerbi.com/links/uXRibvAYus?ctid=ce489f49-6a08-487c-bc9c-7d75078824ea&pbi_source=linkShare)
+`reportEmbed?reportId=2d678484-02d9-4d57-ba4b-6f11f0d496d2&autoAuth=true`
+
+Viewers must use an **IMW work account** that has access to the report workspace. `autoAuth=true` uses their existing Microsoft 365 browser sign-in when possible.
 
 ## If embed does not load for colleagues
 

@@ -28,9 +28,13 @@ const SUBMIT_MODE = 'auto';
 /** Local API when running start-server.bat */
 const LOCAL_API = '/api/submit';
 
-/** Power BI report — embed on site (share link or Publish to web URL) */
+/** Power BI — Embed for organization (users signed into IMW Microsoft 365 in browser) */
 const POWER_BI_EMBED_URL =
-  'https://app.powerbi.com/links/uXRibvAYus?ctid=ce489f49-6a08-487c-bc9c-7d75078824ea&pbi_source=linkShare';
+  'https://app.powerbi.com/reportEmbed?reportId=2d678484-02d9-4d57-ba4b-6f11f0d496d2&autoAuth=true&ctid=ce489f49-6a08-487c-bc9c-7d75078824ea';
+
+/** Open full report in Power BI Service */
+const POWER_BI_OPEN_URL =
+  'https://app.powerbi.com/reportEmbed?reportId=2d678484-02d9-4d57-ba4b-6f11f0d496d2&autoAuth=true&ctid=ce489f49-6a08-487c-bc9c-7d75078824ea';
 
 /** Fallback: Power Automate GET URL for built-in charts if PBI embed is unavailable */
 const DASHBOARD_URL = '';
@@ -40,6 +44,7 @@ const EXCEL_VIEW_URL =
   'https://imwca-my.sharepoint.com/personal/gary_ghag_imw_ca/_layouts/15/Doc.aspx?sourcedoc={b7792ec9-e2f3-4a0b-8310-3a527001870c}&action=default';
 
 window.POWER_BI_EMBED_URL = POWER_BI_EMBED_URL;
+window.POWER_BI_OPEN_URL = POWER_BI_OPEN_URL;
 window.DASHBOARD_URL = DASHBOARD_URL;
 window.EXCEL_VIEW_URL = EXCEL_VIEW_URL;
 window.POWER_AUTOMATE_URL = POWER_AUTOMATE_URL;

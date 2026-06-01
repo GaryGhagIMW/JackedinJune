@@ -134,10 +134,10 @@
       <div class="section-header dashboard-header">
         <div>
           <h2>Live Leaderboard &amp; Stats</h2>
-          <p id="dashboard-status">Power BI dashboard — updates when the dataset refreshes</p>
+          <p id="dashboard-status">Sign in with your IMW work account if prompted — chart updates when the dataset refreshes</p>
         </div>
         <div class="dashboard-actions">
-          <a href="https://app.powerbi.com/links/uXRibvAYus?ctid=ce489f49-6a08-487c-bc9c-7d75078824ea&pbi_source=linkShare" id="pbi-open-link" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Open in Power BI</a>
+          <a href="https://app.powerbi.com/reportEmbed?reportId=2d678484-02d9-4d57-ba4b-6f11f0d496d2&autoAuth=true&ctid=ce489f49-6a08-487c-bc9c-7d75078824ea" id="pbi-open-link" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Open in Power BI</a>
           <a href="#" id="excel-view-link" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Open Excel</a>
         </div>
       </div>
@@ -147,10 +147,10 @@
           id="pbi-embed"
           class="pbi-embed"
           title="Jacked in June 2026 Power BI Leaderboard"
-          src="https://app.powerbi.com/links/uXRibvAYus?ctid=ce489f49-6a08-487c-bc9c-7d75078824ea&pbi_source=linkShare"
+          src="https://app.powerbi.com/reportEmbed?reportId=2d678484-02d9-4d57-ba4b-6f11f0d496d2&autoAuth=true&ctid=ce489f49-6a08-487c-bc9c-7d75078824ea"
           allowfullscreen
         ></iframe>
-        <p class="pbi-embed-hint">If the report does not load below, use <strong>Open in Power BI</strong> (IMW sign-in may be required).</p>
+        <p class="pbi-embed-hint">Use your <strong>IMW work account</strong> if asked to sign in. If the report is blank, open it in a new tab with the button above.</p>
       </div>
 
       <div id="dashboard-setup-notice" class="notice-banner hidden">
@@ -202,6 +202,10 @@
     if (window.EXCEL_VIEW_URL) {
       const link = document.getElementById('excel-view-link');
       if (link) link.href = EXCEL_VIEW_URL;
+    }
+    if (window.POWER_BI_OPEN_URL) {
+      const pbi = document.getElementById('pbi-open-link');
+      if (pbi) pbi.href = POWER_BI_OPEN_URL;
     }
   </script>
 </body>
