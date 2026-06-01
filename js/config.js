@@ -28,16 +28,18 @@ const SUBMIT_MODE = 'auto';
 /** Local API when running start-server.bat */
 const LOCAL_API = '/api/submit';
 
-/**
- * Power Automate GET URL — reads Submissions table as JSON for public leaderboard.
- * See docs/leaderboard-read-flow.md (required; OneDrive embed does not work for other users).
- */
+/** Power BI report — embed on site (share link or Publish to web URL) */
+const POWER_BI_EMBED_URL =
+  'https://app.powerbi.com/links/uXRibvAYus?ctid=ce489f49-6a08-487c-bc9c-7d75078824ea&pbi_source=linkShare';
+
+/** Fallback: Power Automate GET URL for built-in charts if PBI embed is unavailable */
 const DASHBOARD_URL = '';
 
 /** Open full Excel file in browser (IMW login required) */
 const EXCEL_VIEW_URL =
   'https://imwca-my.sharepoint.com/personal/gary_ghag_imw_ca/_layouts/15/Doc.aspx?sourcedoc={b7792ec9-e2f3-4a0b-8310-3a527001870c}&action=default';
 
+window.POWER_BI_EMBED_URL = POWER_BI_EMBED_URL;
 window.DASHBOARD_URL = DASHBOARD_URL;
 window.EXCEL_VIEW_URL = EXCEL_VIEW_URL;
 window.POWER_AUTOMATE_URL = POWER_AUTOMATE_URL;

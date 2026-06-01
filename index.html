@@ -134,17 +134,27 @@
       <div class="section-header dashboard-header">
         <div>
           <h2>Live Leaderboard &amp; Stats</h2>
-          <p id="dashboard-status">Loading…</p>
+          <p id="dashboard-status">Power BI dashboard — updates when the dataset refreshes</p>
         </div>
         <div class="dashboard-actions">
-          <button type="button" class="btn btn-secondary btn-sm" id="dashboard-refresh">Refresh</button>
-          <a href="#" id="excel-view-link" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Open Excel (IMW login)</a>
+          <a href="https://app.powerbi.com/links/uXRibvAYus?ctid=ce489f49-6a08-487c-bc9c-7d75078824ea&pbi_source=linkShare" id="pbi-open-link" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Open in Power BI</a>
+          <a href="#" id="excel-view-link" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Open Excel</a>
         </div>
       </div>
 
+      <div id="pbi-embed-panel" class="pbi-embed-panel">
+        <iframe
+          id="pbi-embed"
+          class="pbi-embed"
+          title="Jacked in June 2026 Power BI Leaderboard"
+          src="https://app.powerbi.com/links/uXRibvAYus?ctid=ce489f49-6a08-487c-bc9c-7d75078824ea&pbi_source=linkShare"
+          allowfullscreen
+        ></iframe>
+        <p class="pbi-embed-hint">If the report does not load below, use <strong>Open in Power BI</strong> (IMW sign-in may be required).</p>
+      </div>
+
       <div id="dashboard-setup-notice" class="notice-banner hidden">
-        <strong>Leaderboard connecting…</strong> OneDrive embed does not work on this site for other users (Microsoft blocks it).
-        An admin needs to add the <strong>read</strong> Power Automate URL to <code>js/config.js</code> — see <code>docs/leaderboard-read-flow.md</code>.
+        <strong>Backup charts unavailable.</strong> See <code>docs/leaderboard-read-flow.md</code> to enable built-in charts.
       </div>
 
       <div id="dashboard-charts" class="hidden">

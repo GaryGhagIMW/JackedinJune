@@ -653,6 +653,32 @@ main {
   transform: translateY(0);
 }
 
+/* Power BI embed */
+.pbi-embed-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+.pbi-embed {
+  width: 100%;
+  height: 720px;
+  border: none;
+  display: block;
+  background: #1a1a2e;
+}
+
+.pbi-embed-hint {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
 /* Dashboard */
 .dashboard-header {
   display: flex;

@@ -3,6 +3,7 @@ const CHART_COLORS = ['#3b9eff', '#f5c842', '#34d399', '#a78bfa', '#f472b6', '#f
 let charts = {};
 
 document.addEventListener('DOMContentLoaded', () => {
+  if (window.POWER_BI_EMBED_URL) return;
   document.getElementById('dashboard-refresh')?.addEventListener('click', () => loadDashboard(true));
   loadDashboard();
   setInterval(() => loadDashboard(), 60000);
