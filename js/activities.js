@@ -150,8 +150,8 @@ const ACTIVITIES = [
 
 /** Teams — Jacked in June 2026 official rosters */
 const TEAMS = {
-  'Team A': {
-    name: 'Team A',
+  'AB Negative': {
+    name: 'AB Negative',
     members: [
       'Torrey Froese',
       'Ariel Liang',
@@ -162,8 +162,8 @@ const TEAMS = {
       'Dale Goudy',
     ],
   },
-  'Team B': {
-    name: 'Team B',
+  'Sweaty and We Know It': {
+    name: 'Sweaty and We Know It',
     members: [
       'Ammar Shoaib',
       'Jay Simpson',
@@ -174,8 +174,8 @@ const TEAMS = {
       'Peyman Kanzehle',
     ],
   },
-  'Team C': {
-    name: 'Team C',
+  'Revenge of the Fit': {
+    name: 'Revenge of the Fit',
     members: [
       'Rina Marceles',
       'Heidi McLellan',
@@ -186,8 +186,8 @@ const TEAMS = {
       'Brandon Johnson',
     ],
   },
-  'Team D': {
-    name: 'Team D',
+  'The Endorphin Syndicate': {
+    name: 'The Endorphin Syndicate',
     members: [
       'Omid Basti',
       'Mali Lombard',
@@ -198,8 +198,8 @@ const TEAMS = {
       'Ahmed Elsaadawy',
     ],
   },
-  'Team E': {
-    name: 'Team E',
+  'No Folk and Chance': {
+    name: 'No Folk and Chance',
     members: [
       'Garrett Smith',
       'Rick Temple',
