@@ -131,21 +131,38 @@
     </section>
 
     <section id="dashboard" class="section reveal">
-      <div class="section-header">
-        <h2>Live Leaderboard &amp; Stats</h2>
-        <p>Charts update automatically from the team Excel file as submissions come in.</p>
+      <div class="section-header dashboard-header">
+        <div>
+          <h2>Live Leaderboard &amp; Stats</h2>
+          <p id="dashboard-status">Loading…</p>
+        </div>
+        <div class="dashboard-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="dashboard-refresh">Refresh</button>
+          <a href="#" id="excel-view-link" class="btn btn-secondary btn-sm" target="_blank" rel="noopener">Open Excel (IMW login)</a>
+        </div>
       </div>
 
-      <div class="embed-panel" id="embed-panel">
-        <iframe
-          id="excel-embed"
-          class="excel-embed"
-          title="Jacked in June 2026 Leaderboard"
-          frameborder="0"
-          scrolling="no"
-          allowfullscreen
-          src="https://imwca-my.sharepoint.com/personal/gary_ghag_imw_ca/_layouts/15/Doc.aspx?sourcedoc={b7792ec9-e2f3-4a0b-8310-3a527001870c}&action=embedview&ActiveCell=%27Dashboard%27!A1&wdAllowInteractivity=False&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True"
-        ></iframe>
+      <div id="dashboard-setup-notice" class="notice-banner hidden">
+        <strong>Leaderboard connecting…</strong> OneDrive embed does not work on this site for other users (Microsoft blocks it).
+        An admin needs to add the <strong>read</strong> Power Automate URL to <code>js/config.js</code> — see <code>docs/leaderboard-read-flow.md</code>.
+      </div>
+
+      <div id="dashboard-charts" class="hidden">
+        <div class="kpi-grid">
+          <div class="kpi-card"><span class="kpi-value" id="kpi-total-points">0</span><span class="kpi-label">Total Points</span></div>
+          <div class="kpi-card"><span class="kpi-value" id="kpi-total-entries">0</span><span class="kpi-label">Activities</span></div>
+          <div class="kpi-card"><span class="kpi-value" id="kpi-active-members">0</span><span class="kpi-label">Active Members</span></div>
+          <div class="kpi-card"><span class="kpi-value kpi-value-sm" id="kpi-top-activity">—</span><span class="kpi-label">Top Activity</span></div>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card"><h3>Points by Team</h3><div class="chart-wrap"><canvas id="chart-teams"></canvas></div></div>
+          <div class="chart-card"><h3>Top Members</h3><div class="chart-wrap"><canvas id="chart-members"></canvas></div></div>
+          <div class="chart-card chart-card-wide"><h3>Points by Activity</h3><div class="chart-wrap chart-wrap-doughnut"><canvas id="chart-activities"></canvas></div></div>
+        </div>
+        <div class="leaderboard-grid">
+          <div class="leaderboard-card"><h3>Team Standings</h3><ol class="leaderboard-list" id="leaderboard-teams"></ol></div>
+          <div class="leaderboard-card"><h3>Member Standings</h3><ol class="leaderboard-list" id="leaderboard-members"></ol></div>
+        </div>
       </div>
     </section>
   </main>
@@ -169,6 +186,13 @@
     `).join('');
   </script>
   <script src="js/app.js"></script>
-  <script src="js/embed.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    if (window.EXCEL_VIEW_URL) {
+      const link = document.getElementById('excel-view-link');
+      if (link) link.href = EXCEL_VIEW_URL;
+    }
+  </script>
 </body>
 </html>
