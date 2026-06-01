@@ -148,10 +148,10 @@ const ACTIVITIES = [
   },
 ];
 
-/** Teams sourced from Signup - Jacked in June 2026.xlsx (placeholder names for now) */
+/** Teams — Jacked in June 2026 official rosters */
 const TEAMS = {
-  'Team 1': {
-    name: 'Team 1',
+  'Team A': {
+    name: 'Team A',
     members: [
       'Torrey Froese',
       'Ariel Liang',
@@ -162,8 +162,8 @@ const TEAMS = {
       'Dale Goudy',
     ],
   },
-  'Team 2': {
-    name: 'Team 2',
+  'Team B': {
+    name: 'Team B',
     members: [
       'Ammar Shoaib',
       'Jay Simpson',
@@ -174,32 +174,32 @@ const TEAMS = {
       'Peyman Kanzehle',
     ],
   },
-  'Team 3': {
-    name: 'Team 3',
+  'Team C': {
+    name: 'Team C',
     members: [
       'Rina Marceles',
       'Heidi McLellan',
       'Nikki Watson',
       'Milton Cordova',
       'Todd Dempsey',
-      'Abdollah Kashkooli',
+      'Aron Stansfeld',
       'Brandon Johnson',
     ],
   },
-  'Team 4': {
-    name: 'Team 4',
+  'Team D': {
+    name: 'Team D',
     members: [
       'Omid Basti',
       'Mali Lombard',
       'Colm Murphy',
       'Gary Ghag',
       'Aileen Wei',
-      'Aron Stansfeld',
+      'Abdollah Kashkooli',
       'Ahmed Elsaadawy',
     ],
   },
-  'Team 5': {
-    name: 'Team 5',
+  'Team E': {
+    name: 'Team E',
     members: [
       'Garrett Smith',
       'Rick Temple',
