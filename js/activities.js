@@ -111,15 +111,6 @@ const ACTIVITIES = [
     description: '1 hour = 6 pts',
   },
   {
-    id: 'stationary-bike',
-    name: 'Stationary Bike',
-    icon: '🚲',
-    category: 'other',
-    pointsPerHour: 7,
-    inputType: 'duration',
-    description: '1 hour = 7 pts',
-  },
-  {
     id: 'table-sports',
     name: 'Table Sports',
     icon: '🏓',
@@ -144,7 +135,16 @@ const ACTIVITIES = [
     category: 'other',
     pointsPerHour: 7,
     inputType: 'duration',
-    description: 'Elliptical, StairMaster, Rowing, etc. — 1 hour = 7 pts',
+    description: 'Bike, Stairmaster, Rowing, Elliptical, etc. — 1 hour = 7 pts',
+  },
+  {
+    id: 'kayaking-paddleboard',
+    name: 'Kayaking / Paddleboard',
+    icon: '🛶',
+    category: 'other',
+    pointsPerHour: 6,
+    inputType: 'duration',
+    description: '1 hour = 6 pts',
   },
 ];
 
