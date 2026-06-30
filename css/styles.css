@@ -139,8 +139,9 @@ main {
   border: 1px solid rgba(248, 113, 113, 0.65);
   color: #fecaca;
   letter-spacing: 0.06em;
-  font-size: clamp(0.65rem, 2.5vw, 0.8rem);
-  max-width: min(100%, 520px);
+  font-size: clamp(0.975rem, 3.75vw, 1.2rem);
+  padding: 0.525rem 1.5rem;
+  max-width: min(100%, 780px);
   line-height: 1.45;
 }
 
