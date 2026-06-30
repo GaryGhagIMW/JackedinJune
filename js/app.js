@@ -1,10 +1,55 @@
 let sessionLog = [];
 let selectedActivityId = 'running';
 
+function isEntryLocked() {
+  const cutoff = window.ENTRY_CUTOFF_ISO;
+  if (!cutoff) return false;
+  return Date.now() >= new Date(cutoff).getTime();
+}
+
+function applyEntryLockdown() {
+  if (!isEntryLocked()) return;
+
+  document.querySelector('.tracker-panel')?.classList.add('tracker-locked');
+  document.getElementById('entry-lock-banner')?.classList.remove('hidden');
+
+  ['team', 'member', 'minutes', 'steps'].forEach((id) => {
+    document.getElementById(id)?.setAttribute('disabled', 'disabled');
+  });
+
+  document.getElementById('add-activity')?.setAttribute('disabled', 'disabled');
+  document.getElementById('submit-all')?.setAttribute('disabled', 'disabled');
+  document.getElementById('clear-session')?.setAttribute('disabled', 'disabled');
+
+  document.querySelectorAll('#activity-grid .activity-card').forEach((btn) => {
+    btn.disabled = true;
+  });
+
+  const heroCta = document.querySelector('.hero-cta');
+  if (heroCta) {
+    heroCta.textContent = 'View Leaderboard →';
+    heroCta.href = '#dashboard';
+  }
+
+  const trackIntro = document.querySelector('#track .section-header p');
+  if (trackIntro) {
+    trackIntro.textContent =
+      'The entry period has ended. View final standings on the leaderboard below.';
+  }
+
+  const notice = document.querySelector('.notice-banner');
+  if (notice) {
+    notice.textContent = 'Submissions are closed. The leaderboard reflects all entries received before the cutoff.';
+  }
+
+  updateSessionUI();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderActivityCards();
   populateTeams();
   bindEvents();
+  applyEntryLockdown();
   updateSessionUI();
 });
 
@@ -83,6 +128,10 @@ function bindEvents() {
 
   document.getElementById('track-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (isEntryLocked()) {
+      showToast('Entries are closed — cutoff was July 2, 2026 at 10:00 AM PDT.', 'error');
+      return;
+    }
     if (sessionLog.length === 0) {
       addToSession();
     }
@@ -142,6 +191,11 @@ function updatePreview() {
 }
 
 function addToSession() {
+  if (isEntryLocked()) {
+    showToast('Entries are closed — cutoff was July 2, 2026 at 10:00 AM PDT.', 'error');
+    return;
+  }
+
   const { team, member, isValid } = getTeamMemberSelection();
   const activity = getActivityById(selectedActivityId);
   const { minutes, steps } = getInputValues();
@@ -225,7 +279,7 @@ function updateSessionUI() {
     }
   }
 
-  if (submitBtn) submitBtn.disabled = sessionLog.length === 0;
+  if (submitBtn) submitBtn.disabled = sessionLog.length === 0 || isEntryLocked();
 }
 
 function animateCounter(el, target) {
@@ -241,6 +295,11 @@ function animateCounter(el, target) {
 }
 
 async function submitSession() {
+  if (isEntryLocked()) {
+    showToast('Entries are closed — cutoff was July 2, 2026 at 10:00 AM PDT.', 'error');
+    return;
+  }
+
   if (sessionLog.length === 0) {
     showToast('Add at least one activity before submitting.', 'error');
     return;
@@ -292,7 +351,7 @@ async function submitSession() {
   }
 
   submitBtn.textContent = 'Submit All Activities';
-  submitBtn.disabled = false;
+  submitBtn.disabled = sessionLog.length === 0 || isEntryLocked();
 
   if (submitted) {
     sessionLog = [];

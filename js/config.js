@@ -43,6 +43,9 @@ const DASHBOARD_URL = '';
 const EXCEL_VIEW_URL =
   'https://imwca-my.sharepoint.com/personal/gary_ghag_imw_ca/_layouts/15/Doc.aspx?sourcedoc={b7792ec9-e2f3-4a0b-8310-3a527001870c}&action=default';
 
+/** Activity entry cutoff — July 2, 2026, 10:00 AM Pacific Daylight Time */
+const ENTRY_CUTOFF_ISO = '2026-07-02T10:00:00-07:00';
+
 window.POWER_BI_EMBED_URL = POWER_BI_EMBED_URL;
 window.POWER_BI_OPEN_URL = POWER_BI_OPEN_URL;
 window.DASHBOARD_URL = DASHBOARD_URL;
@@ -51,3 +54,4 @@ window.POWER_AUTOMATE_URL = POWER_AUTOMATE_URL;
 window.POWER_AUTOMATE_KEY = POWER_AUTOMATE_KEY;
 window.SUBMIT_MODE = SUBMIT_MODE;
 window.LOCAL_API = LOCAL_API;
+window.ENTRY_CUTOFF_ISO = ENTRY_CUTOFF_ISO;
